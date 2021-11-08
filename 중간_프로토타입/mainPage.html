@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>게으른 인생을 깨우자, 인생 깨우기 알람</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style media="screen">
+    .phoneScreen {
+      border: 3px solid;
+      width: 600px;
+      height: 900px;
+      margin: auto;
+      position: relative;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 15%;
+      margin: 0 auto;
+    }
+
+    .footer button {
+      width: 19%;
+      height: 100%;
+    }
+
+    .statusBar {
+      background-color: #a9a9a9;
+      width: 100%;
+      height: 5%;
+      text-align: center;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    #alarmMenuText {
+      color: white;
+      margin: auto;
+    }
+
+    #hour,
+    #minute {
+      width: 150px;
+      height: 150px;
+      font-size: 80px;
+      text-align: center;
+      border: 5px solid;
+      border-radius: 30px;
+    }
+
+    text {
+      font-size: 80px;
+    }
+
+    #alarmSetting {
+      text-align: center;
+      padding: 30px;
+    }
+
+    #setBtn,
+    #resetBtn {
+      width: 49%;
+      font-size: 30px;
+    }
+
+    .remain_time {
+      font-size: 50px;
+      font-weight: solid;
+      text-align: center;
+    }
+
+    .remain_time span {
+      padding-left: 10px;
+    }
+
+    #remainTime {
+      font-size: 25px;
+    }
+
+    .wakeupCheck {
+      height: 20%;
+      width: 80%;
+      margin: auto;
+    }
+
+    #wakeupCheckBtn {
+      width: 100%;
+      height: 100%;
+      font-size: 40px;
+      margin-top: 80px;
+    }
+
+    #banImg {
+      margin-top: 60%;
+      text-align: center;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="phoneScreen">
+    <div class="statusBar">
+      <h1 id="alarmMenuText">기상 모드</h1>
+    </div>
+    <div class="collapse" id="alarmMark">
+      <img src="./alarmIcon.jpg" style="width: 50px; height: 50px;"/>
+    </div>
+
+      <!-- 회원가입 확인 Modal-->
+    	<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">미션</h4>
+            </div>
+            <div class="modal-body">
+              <form>
+                  <div id="mathProb"></div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-danger" id="emergencyBtn" onclick="emergencyOff()">긴급 종료</button>
+              <form>
+                  <input id='answer' onkeyup='checkResult()' type='text' placeholder="정답" />
+              </form>
+              <button class="btn btn-success" onClick="checkResult()">제출</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    	</div>
+
+
+    <div id="content">
+      <div id="alarmSetting" name="alarmSetting">
+        <input type="number" id="hour" name="hour" value="00" /> <text>:</text>
+        <input type="number" id="minute" name="minute" value="00" /><br>
+        <h2 id="timeNotice">00시 00분으로 알람을 설정하시겠습니까?</h2><br>
+        <button id="setBtn" name="setBtn">설정</button>
+        <button id="resetBtn" name="resetBtn">초기화</button>
+      </div>
+      <div class ="remain_time" id="remainTime">
+        <div><span>00</span>시 <span>00</span>분 <span>00</span>초 </div>
+        <span name="remainTime">뒤면 알람이 울립니다.</span>
+      </div>
+      <div class="wakeupCheck">
+        <button id="wakeupCheckBtn" name="wakeupCheckBtn" onclick="alarmOff()" disabled>기상 확인</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button id="footer_btn"><img src="./alarm.png"><br>기상 모드</button>
+      <button id="footer_btn2"><img src="./workout.png"><br>운동 모드</button>
+      <button id="footer_btn3"><img src="./study.png"><br>공부 모드</button>
+      <button><img src="./reward.png"><br>보상 페이지</button>
+      <button><img src="./settings.png"><br>설정</button>
+    </div>
+  </div>
+
+  <script>
+    var t = document.getElementById('footer_btn')
+    var t1 = document.getElementById('footer_btn2')
+    var t2 = document.getElementById('footer_btn3')
+    var t3 = document.getElementById('setBtn')
+
+<!-- Begin
+    var alarmTime;
+    var curTime;
+    var check = new Date();
+    var hourNum;
+    var minNum;
+    var totalRemain;
+    var interval;
+
+    let var1 = Math.floor(Math.random()*100)
+    let var2 = Math.floor(Math.random()*100)
+    let idx = Math.floor(Math.random()*4)
+    let operand = ['*','-','+']
+
+//  End -->
+    t.addEventListener('click', function (e) {
+
+      changePage(e.target.outerText)
+    });
+    t1.addEventListener('click', function (e) {
+      changePage(e.target.outerText)
+    });
+    t2.addEventListener('click', function (e) {
+      changePage(e.target.outerText)
+    });
+
+    t3.addEventListener('click', alarmSet);
+
+    var changePage = (mode) => {
+
+      var title = document.getElementById('alarmMenuText')
+      var content = document.getElementById('content')
+
+      if (mode == '\n기상 모드') {
+
+        var html = `
+        <div id="alarmSetting" name="alarmSetting">
+          <input type="number" id="hour" name="hour" value="00" /> <text>:</text>
+          <input type="number" id="minute" name="minute" value="00" /><br>
+          <h2 id="timeNotice">00시 00분으로 알람을 설정하시겠습니까?</h2><br>
+          <button id="setBtn" name="setBtn">설정</button>
+          <button id="resetBtn" name="resetBtn">초기화</button>
+        </div>
+        <div class ="remain_time">
+          <div><span>00</span>시 <span>00</span>분 <span>00</span>초 </div>
+          <span id="remainTime" name="remainTime">뒤면 알람이 울립니다.</span>
+        </div>
+        <div class="wakeupCheck">
+          <button id="wakeupCheckBtn" name="wakeupCheckBtn" disabled>기상 확인</button>
+        </div>
+        `
+        title.innerHTML = '기상 모드'
+        content.innerHTML = html
+        SetTime();
+        document.getElementById('hour').addEventListener('keyup',() => {
+        showSetTime();
+        } )
+      }else if (mode == '\n운동 모드') {
+
+        var html = '<div id="banImg"><img src="./ban.png" /><h3 id="msg">프로토 타입 버전에서는 운동 모드를 이용하실 수 없습니다.</h3></div>'
+
+        title.innerHTML = '운동 모드'
+        content.innerHTML = html
+
+      }
+      else if (mode == '\n공부 모드') {
+        var html = '<div id="banImg"><img src="./ban.png" /><h3 id="msg">프로토 타입 버전에서는 공부 모드를 이용하실 수 없습니다.</h3></div>'
+        title.innerHTML = '공부 모드'
+        content.innerHTML = html
+      }
+    }
+
+
+
+<!-- Begin
+function GetTime() {
+    var dt = new Date();
+        setTimeout("GetTime()", 1000);
+        curTime = (IfZero(dt.getHours()) + ":" + IfZero(dt.getMinutes()));
+    }
+
+function SetTime(){ <!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    var dt = new Date();
+    document.getElementById('hour').value = IfZero(dt.getHours());
+    document.getElementById('minute').value = IfZero(dt.getMinutes());
+}
+
+function resetTime(){ <!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    SetTime();
+    document.getElementById('timeNotice').innerText = "00시 00분으로 알람을 설정하시겠습니까?"
+}
+
+function showSetTime(){ <!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  document.getElementById('timeNotice').innerText = document.getElementById('hour').value+"시 "  + document.getElementById('minute').value+"분으로 알람을 설정하시겠습니까?"
+}
+
+function showRemainTIme(){ <!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  var remainHour;
+  var remainMin;
+  var remainSec;
+
+  remainHour = totalRemain/3600;
+  remainMin = (totalRemain%3600)/60;
+  remainSec = (totalRemain%3600)%60;
+
+  document.getElementById('remainTime').innerHTML = "<div><span>"+parseInt(remainHour)+"</span>시간 <span>"+parseInt(remainMin)+"</span>분 <span>"+remainSec+"</span>초 </div><span>뒤면 알람이 울립니다.</span>"
+
+
+
+  if(totalRemain == 0){
+    clearInterval(interval);
+
+    var1 = Math.floor(Math.random()*100);
+    var2 = Math.floor(Math.random()*10);
+    idx = Math.floor(Math.random()*3);
+
+    $('#mathProb').text(var1 + " " + operand[idx] + " " + var2)
+
+    $('#alarmMark').attr('class','');
+    $('#testModal').modal("show");
+
+  }
+
+  totalRemain--;
+}
+
+
+function IfZero(num) {
+    return ((num <= 9) ? ("0" + num) : num);
+}
+
+function alarmSet() { <!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    var dt = new Date();
+
+    hourNum = document.getElementById('hour').value;
+    minNum = document.getElementById('minute').value;
+
+    if(hourNum > 24){
+      alert('잘못된 시간을 입력 하였습니다.')
+      return
+    }
+
+    totalRemain = (hourNum-dt.getHours())*3600 + (minNum-dt.getMinutes())*60;
+
+    if(totalRemain<0){
+      totalRemain = totalRemain + 24*3600;
+    }
+
+    interval = setInterval(showRemainTIme, 1000);
+
+}
+
+function alarmOff() {   <!-- 기상 확인 버튼 눌렀을 때 -->
+  clearInterval(interval)
+  document.getElementById('remainTime').innerHTML = "<div><span>"+00+"</span>시간 <span>"+00+"</span>분 <span>"+00+"</span>초 </div><span>뒤면 알람이 울립니다.</span>"
+}
+
+function snooze() {     <!-- 미션 성공 했을 때 -->
+        setTimeout(activator, 60000)
+        totalRemain = 300;
+        interval = setInterval(showRemainTIme, 1000);
+}
+
+function activator(){
+  $('#wakeupCheckBtn').attr("disabled",false)
+}
+
+function emergencyOff() {
+  $('#testModal').modal("hide");
+  $('#alarmMark').attr('class','collapse');
+}
+
+
+
+
+    const checkResult = () => {
+
+        let answer =document.getElementById('answer').value
+        if(operand[idx] == '/'){
+            if(answer == var1/var2){
+                $('#testModal').modal("hide");
+                $('#alarmMark').attr('class','collapse');
+                snooze();
+            }
+        }
+        else if(operand[idx] == '*'){
+            if(answer == var1*var2){
+                $('#testModal').modal("hide");
+                $('#alarmMark').attr('class','collapse');
+                snooze();
+            }
+        }
+        else if(operand[idx] == '+'){
+            if(answer == var1+var2){
+                $('#testModal').modal("hide");
+                $('#alarmMark').attr('class','collapse');
+                snooze();
+            }
+        }
+        else {
+            if(answer == var1-var2){
+                $('#testModal').modal("hide");
+                $('#alarmMark').attr('class','collapse');
+                snooze();
+            }
+        }
+    }
+
+window.onload = ()=>{ <!--////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+      GetTime();
+      SetTime();
+      document.getElementById('hour').addEventListener('keyup',() => {
+      showSetTime();
+      } )
+      document.getElementById('resetBtn').addEventListener('click',resetTime)
+    }
+//  End -->
+
+
+
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>
